@@ -165,14 +165,14 @@ function add_blobs () {
   let nr = 50
 
   let bl = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.35, 0.35),
+    new THREE.PlaneGeometry(0.45, 0.45),
     new THREE.MeshBasicMaterial({
       map: blob,
       transparent: true,
       blending: THREE.AdditiveBlending,
       depthTest: false,
       depthWrite: false,
-      opacity: 0.8
+      opacity: 0.7
     })
   )
 
@@ -190,9 +190,11 @@ function add_blobs () {
   }
 }
 
+let sign = undefined
+
 function update_blobs () {
   blobs.forEach(b => {
-    b.userData.life += 0.2
+    b.userData.life += 0.3
     b.scale.setScalar(Math.sin(0.5 * b.userData.life))
 
     if (b.userData.life > 2 * Math.PI) {
@@ -207,6 +209,19 @@ function update_blobs () {
 
     // reset life
   })
+
+
+  if (point.x >= 0 && sign === undefined) sign = true
+  if (point.x < 0 && sign === undefined) sign = false
+  if (point.x >= 0.3 && sign === true) sign = false
+  if (point.x <= -0.3 && sign === false) sign = true
+  if (sign === true) {
+    point.x += 0.005
+    point.y = Math.sin(range(-0.05, 0.05 * Math.PI))
+  }
+  if (sign === false) {
+    point.x -= 0.005
+  }
 }
 
 function add_reycaster_event () {
@@ -222,7 +237,6 @@ function add_reycaster_event () {
 
     if (intersects[0]) {
       point.copy(intersects[0].point)
-      // console.log(point)
     }
   })
 }
@@ -231,6 +245,7 @@ const animate = () => {
   time += 0.0015
   // mesh.rotation.x = time
   // mesh.rotation.y = time
+
   update_blobs()
   renderer.setRenderTarget(rendererTarget)
   renderer.render(scene1, camera)
