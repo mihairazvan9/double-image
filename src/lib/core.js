@@ -206,8 +206,6 @@ function update_blobs () {
       b.position.x = point.x + r * Math.sin(theta)
       b.position.y = point.y + r * Math.cos(theta)
     }
-
-    // reset life
   })
 
 
@@ -220,6 +218,8 @@ function update_blobs () {
     point.y = Math.sin(range(-0.05, 0.05 * Math.PI))
   }
   if (sign === false) {
+    point.y = Math.sin(range(-0.05, 0.05 * Math.PI))
+
     point.x -= 0.005
   }
 }
